@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YADLE AI — Inteligência Artificial de Elite</title>
+<meta name="description" content="Scripts, automações e análise de imagens. A IA que resolve de verdade.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ─── VARIÁVEIS ─────────────────────────── */
+:root{
+  --bg:#f5f0eb; --dark:#0d0d0d;
+  --pink:#ff3cac; --cyan:#00e5ff;
+  --yellow:#ffe600; --green:#00ff88;
+  --muted:#888; --card:#fff;
+
+  /* 👇 COLOQUE SEU LINK DO ARTIFACT AQUI */
+  --chat-url: "SEU_LINK_DO_ARTIFACT_AQUI";
+}
+
+/* ─── RESET ─────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--dark);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+
+/* ─── NOISE ──────────────────────────────── */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.4;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+}
+
+/* ─── NAV ────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 5vw;
+  background:rgba(245,240,235,.92);backdrop-filter:blur(20px);
+  border-bottom:2px solid var(--dark);
+}
+.logo{font-family:'Syne',sans-serif;font-weight:900;font-size:1.35rem;color:var(--dark);letter-spacing:-.02em;text-decoration:none}
+.logo span{color:var(--pink)}
+.nav-vip{
+  background:var(--dark);color:#fff;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.1em;
+  padding:10px 22px;border:none;cursor:pointer;text-decoration:none;display:inline-block;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+  transition:background .2s,transform .15s;
+}
+.nav-vip:hover{background:var(--pink);transform:translateY(-2px)}
+
+/* ─── HERO ───────────────────────────────── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:130px 5vw 90px;position:relative;overflow:hidden;text-align:center;
+}
+/* blobs */
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.32;pointer-events:none}
+.b1{width:560px;height:560px;background:var(--pink);top:-120px;left:-120px;animation:drift 9s ease-in-out infinite alternate}
+.b2{width:440px;height:440px;background:var(--cyan);bottom:-100px;right:-100px;animation:drift 9s ease-in-out infinite alternate;animation-delay:-4s}
+.b3{width:320px;height:320px;background:var(--yellow);top:50%;left:50%;animation:drift2 11s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(28px,18px) scale(1.07)}}
+@keyframes drift2{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(calc(-50% + 22px),calc(-50% + 28px)) scale(1.1)}}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--dark);color:#fff;
+  font-size:.66rem;letter-spacing:.2em;font-weight:500;
+  padding:7px 16px;margin-bottom:30px;position:relative;z-index:1;
+  animation:fadeDown .6s ease both;
+}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.4s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+h1{
+  font-family:'Syne',sans-serif;font-weight:900;
+  font-size:clamp(2.8rem,8vw,6.8rem);
+  line-height:1.0;letter-spacing:-.04em;
+  color:var(--dark);position:relative;z-index:1;
+  animation:fadeUp .7s ease .1s both;margin-bottom:26px;
+}
+h1 em{font-style:normal;color:var(--pink)}
+h1 .outline{-webkit-text-stroke:3px var(--dark);color:transparent}
+
+.hero-sub{
+  font-size:clamp(.95rem,2vw,1.15rem);color:var(--muted);
+  max-width:500px;line-height:1.75;margin:0 auto 44px;
+  font-weight:300;position:relative;z-index:1;
+  animation:fadeUp .7s ease .2s both;
+}
+.hero-btns{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  position:relative;z-index:1;animation:fadeUp .7s ease .3s both;
+}
+.btn-main{
+  background:var(--pink);color:#fff;
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:.88rem;letter-spacing:.06em;
+  padding:16px 38px;border:none;cursor:pointer;
+  text-decoration:none;display:inline-block;
+  transition:transform .15s,box-shadow .2s;
+  box-shadow:4px 4px 0 var(--dark);
+}
+.btn-main:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--dark)}
+.btn-out{
+  background:transparent;color:var(--dark);
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:.88rem;letter-spacing:.06em;
+  padding:15px 38px;border:2px solid var(--dark);
+  cursor:pointer;text-decoration:none;display:inline-block;
+  transition:background .2s,color .2s;
+}
+.btn-out:hover{background:var(--dark);color:#fff}
+
+.hero-stats{
+  display:flex;gap:44px;justify-content:center;flex-wrap:wrap;
+  margin-top:72px;padding-top:42px;border-top:2px solid var(--dark);
+  position:relative;z-index:1;animation:fadeUp .7s ease .4s both;
+}
+.stat-num{font-family:'Syne',sans-serif;font-weight:900;font-size:2.1rem;color:var(--dark);line-height:1}
+.stat-num b{color:var(--pink)}
+.stat-lbl{font-size:.68rem;color:var(--muted);letter-spacing:.1em;margin-top:5px}
+
+/* ─── MARQUEE ────────────────────────────── */
+.marquee{
+  background:var(--dark);padding:13px 0;overflow:hidden;
+  border-top:2px solid var(--dark);border-bottom:2px solid var(--dark);
+  position:relative;z-index:1;
+}
+.mq-track{display:flex;white-space:nowrap;animation:mq 22s linear infinite}
+.mq-track span{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.1em;color:#fff;padding:0 28px}
+.mq-track span.ac{color:var(--yellow)}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── FEATURES ───────────────────────────── */
+.features{padding:100px 5vw;max-width:1160px;margin:0 auto;position:relative;z-index:1}
+.sec-tag{font-size:.66rem;letter-spacing:.2em;color:var(--muted);font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.sec-tag::before{content:'';width:28px;height:2px;background:var(--pink);flex-shrink:0}
+.sec-title{font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.9rem,4.5vw,3.2rem);line-height:1.1;letter-spacing:-.03em;color:var(--dark);margin-bottom:56px;max-width:600px}
+.sec-title span{color:var(--pink)}
+
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:2px}
+.feat-card{
+  background:var(--card);padding:34px 30px;
+  border:2px solid var(--dark);position:relative;overflow:hidden;
+  transition:transform .2s;
+}
+.feat-card:hover{transform:translate(-3px,-3px)}
+.feat-card::after{
+  content:'';position:absolute;bottom:0;right:0;
+  width:90px;height:90px;border-radius:50%;
+  background:var(--ac,var(--pink));opacity:.07;
+  transform:translate(35px,35px);
+}
+.feat-card:nth-child(1){--ac:var(--pink)}
+.feat-card:nth-child(2){--ac:var(--cyan)}
+.feat-card:nth-child(3){--ac:var(--yellow)}
+.feat-card:nth-child(4){--ac:var(--green)}
+.feat-icon{font-size:2rem;margin-bottom:14px;display:block}
+.feat-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--dark);margin-bottom:10px}
+.feat-desc{font-size:.82rem;color:var(--muted);line-height:1.7}
+
+/* ─── CHAT PREVIEW ───────────────────────── */
+.preview{padding:100px 5vw;background:var(--dark);position:relative;z-index:1;text-align:center}
+.preview .sec-tag{justify-content:center;color:#555}
+.preview .sec-tag::before{background:var(--cyan)}
+.preview .sec-title{color:#fff;margin:0 auto 50px;text-align:center}
+.preview .sec-title span{color:var(--cyan)}
+
+.chat-box{max-width:680px;margin:0 auto;background:#0a0a0a;border:2px solid #1a1a1a;text-align:left;overflow:hidden}
+.chat-bar{background:#111;padding:13px 20px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #1a1a1a}
+.chat-dots{display:flex;gap:6px}
+.chat-dots span{width:10px;height:10px;border-radius:50%}
+.chat-dots span:nth-child(1){background:#ff5f57}
+.chat-dots span:nth-child(2){background:#febc2e}
+.chat-dots span:nth-child(3){background:#28c840}
+.chat-lbl{font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;color:#555;margin-left:8px;letter-spacing:.1em}
+.chat-body{padding:22px 18px;display:flex;flex-direction:column;gap:14px}
+.cmsg{display:flex;gap:10px;max-width:88%}
+.cmsg.u{align-self:flex-end;flex-direction:row-reverse}
+.cav{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.82rem;border:1px solid #1a1a1a;background:#111;align-self:flex-end}
+.cbub{padding:11px 15px;font-size:.75rem;line-height:1.7;font-family:'DM Sans',sans-serif;color:#ccc;border:1px solid #1a1a1a;background:#111}
+.cmsg.u .cbub{background:#0d1a2a;border-color:#1a3050;color:#c4d0e8}
+.cbub code{display:block;background:#050709;border:1px solid #222;padding:11px;margin:8px 0;font-size:.68rem;color:#00ff88;font-family:'Space Mono',monospace;line-height:1.6;white-space:pre}
+
+/* ─── HOW ────────────────────────────────── */
+.how{padding:100px 5vw;max-width:1160px;margin:0 auto;position:relative;z-index:1}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:56px}
+.step{padding:38px 30px;border:2px solid var(--dark);margin-right:-2px;margin-bottom:-2px;background:var(--card)}
+.step-n{font-family:'Syne',sans-serif;font-weight:900;font-size:3.2rem;color:var(--dark);opacity:.07;line-height:1;margin-bottom:10px}
+.step-icon{font-size:1.7rem;margin-bottom:10px;display:block}
+.step-title{font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;margin-bottom:8px}
+.step-desc{font-size:.8rem;color:var(--muted);line-height:1.6}
+
+/* ─── PRICING ────────────────────────────── */
+.pricing{padding:100px 5vw;background:var(--dark);position:relative;z-index:1;overflow:hidden}
+.pricing::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:var(--pink);opacity:.05;pointer-events:none}
+.pricing-wrap{max-width:880px;margin:0 auto}
+.pricing .sec-tag{color:#555}
+.pricing .sec-tag::before{background:var(--yellow)}
+.pricing .sec-title{color:#fff}
+.pricing .sec-title span{color:var(--yellow)}
+
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.plan{padding:40px 34px;border:2px solid #2a2a2a;position:relative}
+.plan.vip{border-color:var(--yellow);background:linear-gradient(135deg,#1a1400,#0d0d0d)}
+.plan-badge{position:absolute;top:-13px;left:30px;background:var(--yellow);color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:.6rem;letter-spacing:.15em;padding:4px 12px}
+.plan-name{font-family:'Syne',sans-serif;font-weight:800;font-size:.75rem;letter-spacing:.15em;color:#444;margin-bottom:14px}
+.plan.vip .plan-name{color:var(--yellow)}
+.plan-price{font-family:'Syne',sans-serif;font-weight:900;font-size:2.8rem;color:#fff;line-height:1;margin-bottom:6px}
+.plan-price sup{font-size:.9rem;color:#666}
+.plan-period{font-size:.72rem;color:#444;margin-bottom:26px}
+.plan.vip .plan-period{color:#777}
+.plan-feats{list-style:none;margin-bottom:28px}
+.plan-feats li{font-size:.8rem;color:#666;padding:7px 0;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;gap:9px}
+.plan.vip .plan-feats li{color:#bbb;border-color:#1f1f00}
+.plan-feats .ck{color:var(--green);flex-shrink:0}
+.plan-feats .cx{color:#2a2a2a;flex-shrink:0}
+.plan.vip .plan-feats .ck{color:var(--yellow)}
+
+.plan-btn{width:100%;padding:13px;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-weight:800;font-size:.8rem;letter-spacing:.1em;transition:all .2s;text-decoration:none;display:block;text-align:center}
+.plan-btn.free{background:#1a1a1a;color:#444}
+.plan-btn.free:hover{background:#222;color:#fff}
+.plan-btn.gold{background:var(--yellow);color:#000;box-shadow:4px 4px 0 #5a4d00}
+.plan-btn.gold:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #5a4d00}
+
+/* ─── MODAL PIX ──────────────────────────── */
+.overlay{position:fixed;inset:0;background:#000000cc;z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;max-width:440px;width:92%;border:3px solid var(--dark);padding:42px 38px;position:relative;box-shadow:8px 8px 0 var(--dark);transform:scale(.95);transition:transform .3s}
+.overlay.open .modal{transform:scale(1)}
+.modal-x{position:absolute;top:14px;right:18px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted)}
+.modal-eye{font-size:.6rem;letter-spacing:.2em;color:var(--muted);margin-bottom:10px}
+.modal h2{font-family:'Syne',sans-serif;font-weight:900;font-size:1.75rem;color:var(--dark);margin-bottom:8px;line-height:1.1}
+.modal h2 span{color:var(--pink)}
+.modal p{font-size:.78rem;color:var(--muted);line-height:1.75;margin-bottom:22px}
+.pix-card{background:var(--dark);padding:22px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden}
+.pix-card::before{content:'PIX';position:absolute;right:-8px;top:-8px;font-family:'Syne',sans-serif;font-weight:900;font-size:5rem;color:#fff;opacity:.04;pointer-events:none}
+.pix-sub{font-size:.58rem;letter-spacing:.2em;color:#555;margin-bottom:8px}
+.pix-key{font-size:.76rem;color:var(--yellow);letter-spacing:.04em;word-break:break-all;margin-bottom:10px}
+.pix-val{font-family:'Syne',sans-serif;font-weight:900;font-size:2.7rem;color:#fff;line-height:1}
+.pix-val sup{font-size:.9rem;color:var(--yellow)}
+.copy-btn{width:100%;padding:11px;margin-top:10px;background:transparent;border:1px solid #ddd;color:var(--muted);font-family:'Syne',sans-serif;font-weight:700;font-size:.66rem;letter-spacing:.1em;cursor:pointer;transition:all .2s}
+.copy-btn:hover,.copy-btn.copied{background:var(--green);color:#000;border-color:var(--green)}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0;font-size:.66rem;color:var(--muted);letter-spacing:.1em}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#e5e5e5}
+.contact-box{background:#f7f7f7;padding:14px 18px;display:flex;align-items:center;gap:14px;border:1px solid #e8e8e8;margin-bottom:14px;font-size:.78rem;color:#333;line-height:1.5}
+.contact-box strong{font-family:'Syne',sans-serif;display:block;color:#000;margin-bottom:2px}
+.modal-note{font-size:.62rem;color:var(--muted);text-align:center;line-height:1.7}
+
+/* ─── FOOTER ─────────────────────────────── */
+footer{background:var(--dark);border-top:2px solid #111;padding:36px 5vw;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;position:relative;z-index:1}
+.foot-logo{font-family:'Syne',sans-serif;font-weight:900;font-size:1.15rem;color:#fff}
+.foot-logo span{color:var(--pink)}
+.foot-copy{font-size:.7rem;color:#2a2a2a}
+
+/* ─── ANIMATIONS ─────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ─── RESPONSIVE ─────────────────────────── */
+@media(max-width:700px){
+  nav{padding:13px 5vw}
+  h1{font-size:clamp(2.4rem,10vw,3.8rem)}
+  .hero-stats{gap:24px}
+  .plans{grid-template-columns:1fr}
+  .modal{padding:30px 22px}
+  .features,.how,.preview,.pricing{padding:64px 5vw}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">YADLE<span>AI</span></a>
+  <button class="nav-vip" onclick="openModal()">★ ASSINAR VIP</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    INTELIGÊNCIA ARTIFICIAL ONLINE AGORA
+  </div>
+
+  <h1>A AI que<br><em>resolve</em> de<br><span class="outline">verdade</span></h1>
+
+  <p class="hero-sub">Scripts, automações, análise de imagens e muito mais.<br>Rápida, precisa e sem enrolação — do grátis ao VIP.</p>
+
+  <div class="hero-btns">
+    <!-- 👇 SUBSTITUA O LINK PELO SEU ARTIFACT -->
+    <a href="SEU_LINK_DO_ARTIFACT_AQUI" target="_blank" class="btn-main">🚀 USAR GRÁTIS AGORA</a>
+    <a href="#pricing" class="btn-out">VER PLANOS</a>
+  </div>
+
+  <div class="hero-stats">
+    <div><div class="stat-num">10<b>k+</b></div><div class="stat-lbl">SCRIPTS GERADOS</div></div>
+    <div><div class="stat-num">99<b>%</b></div><div class="stat-lbl">UPTIME</div></div>
+    <div><div class="stat-num">R$<b>4,75</b></div><div class="stat-lbl">PLANO VIP</div></div>
+    <div><div class="stat-num"><b>&lt;</b>2s</div><div class="stat-lbl">RESPOSTA</div></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="mq-track">
+    <span>PYTHON</span><span class="ac">★</span><span>POWERSHELL</span><span class="ac">★</span><span>JAVASCRIPT</span><span class="ac">★</span><span>ANÁLISE DE IMAGEM</span><span class="ac">★</span><span>SCRIPTS .BAT</span><span class="ac">★</span><span>OTIMIZAÇÃO WINDOWS</span><span class="ac">★</span><span>AUTOMAÇÃO</span><span class="ac">★</span>
+    <span>PYTHON</span><span class="ac">★</span><span>POWERSHELL</span><span class="ac">★</span><span>JAVASCRIPT</span><span class="ac">★</span><span>ANÁLISE DE IMAGEM</span><span class="ac">★</span><span>SCRIPTS .BAT</span><span class="ac">★</span><span>OTIMIZAÇÃO WINDOWS</span><span class="ac">★</span><span>AUTOMAÇÃO</span><span class="ac">★</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="sec-tag">O QUE ELA FAZ</div>
+  <h2 class="sec-title reveal">Tudo que você precisa, <span>num só lugar</span></h2>
+  <div class="feat-grid">
+    <div class="feat-card reveal">
+      <span class="feat-icon">🐍</span>
+      <div class="feat-title">Scripts Python & JS</div>
+      <div class="feat-desc">Automatize tarefas, renomeie arquivos, faça scraping, crie bots — qualquer script que você precisar.</div>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🛡️</span>
+      <div class="feat-title">PowerShell & .bat</div>
+      <div class="feat-desc">Scripts Windows com ponto de restauração automático. Otimize, limpe e gerencie seu sistema.</div>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">🖼️</span>
+      <div class="feat-title">Análise de Imagens</div>
+      <div class="feat-desc">Envie uma foto e a YADLE AI lê, interpreta e resolve — OCR, diagnóstico, código em imagem e mais.</div>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">⚡</span>
+      <div class="feat-title">Respostas Instantâneas</div>
+      <div class="feat-desc">Sem espera, sem travamento. Resposta em segundos, direto ao ponto.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAT PREVIEW -->
+<section class="preview">
+  <div class="sec-tag">VEJA NA PRÁTICA</div>
+  <h2 class="sec-title reveal">A AI em <span>ação</span></h2>
+  <div class="chat-box reveal">
+    <div class="chat-bar">
+      <div class="chat-dots"><span></span><span></span><span></span></div>
+      <div class="chat-lbl">YADLE AI — CHAT</div>
+    </div>
+    <div class="chat-body">
+      <div class="cmsg u">
+        <div class="cav">👤</div>
+        <div class="cbub">Cria um script Python pra renomear todos os arquivos de uma pasta adicionando a data</div>
+      </div>
+      <div class="cmsg">
+        <div class="cav">🤖</div>
+        <div class="cbub">Claro! Aqui está:<code>import os
+from datetime import datetime
+
+pasta = r"C:\SuaPasta"
+data = datetime.now().strftime("%Y%m%d")
+
+for arquivo in os.listdir(pasta):
+    nome, ext = os.path.splitext(arquivo)
+    novo = f"{data}_{nome}{ext}"
+    os.rename(
+        os.path.join(pasta, arquivo),
+        os.path.join(pasta, novo)
+    )</code>Altere o caminho e execute. ✅</div>
+      </div>
+      <div class="cmsg u">
+        <div class="cav">👤</div>
+        <div class="cbub">Agora com comentário em cada linha 🔥</div>
+      </div>
+      <div class="cmsg">
+        <div class="cav">★</div>
+        <div class="cbub" style="border-color:#ffd84d22;background:#0f1108">
+          <span style="color:#ffd84d;font-size:.65rem;letter-spacing:.1em">★ MODO VIP</span><br><br>
+          Versão completa com comentários em cada linha disponível no Modo VIP! 🚀
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="sec-tag">COMO FUNCIONA</div>
+  <h2 class="sec-title reveal">Simples assim, <span>sem complicação</span></h2>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-n">01</div>
+      <span class="step-icon">💬</span>
+      <div class="step-title">Acesse o Chat</div>
+      <div class="step-desc">Clique em "Usar Grátis Agora" e comece a conversar. Sem cadastro.</div>
+    </div>
+    <div class="step reveal">
+      <div class="step-n">02</div>
+      <span class="step-icon">✍️</span>
+      <div class="step-title">Envie sua Dúvida</div>
+      <div class="step-desc">Digite ou envie uma foto. A YADLE AI entende tudo em português.</div>
+    </div>
+    <div class="step reveal">
+      <div class="step-n">03</div>
+      <span class="step-icon">⚡</span>
+      <div class="step-title">Receba a Solução</div>
+      <div class="step-desc">Script pronto, explicação clara, em segundos. Copie e use.</div>
+    </div>
+    <div class="step reveal" style="background:var(--dark)">
+      <div class="step-n" style="color:#ffd84d;opacity:.15">04</div>
+      <span class="step-icon">★</span>
+      <div class="step-title" style="color:#ffd84d">Quer mais? VIP</div>
+      <div class="step-desc" style="color:#444">Pague R$ 4,75 via Pix e desbloqueie scripts ilimitados.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-wrap">
+    <div class="sec-tag">PLANOS</div>
+    <h2 class="sec-title reveal">Escolha seu <span>plano</span></h2>
+    <div class="plans">
+      <div class="plan reveal">
+        <div class="plan-name">MODO GRÁTIS</div>
+        <div class="plan-price">R$ <sup>0</sup></div>
+        <div class="plan-period">para sempre grátis</div>
+        <ul class="plan-feats">
+          <li><span class="ck">✓</span> Chat ilimitado</li>
+          <li><span class="ck">✓</span> Scripts até 10 linhas</li>
+          <li><span class="ck">✓</span> Análise de imagens</li>
+          <li><span class="ck">✓</span> Python, JS, PowerShell</li>
+          <li><span class="cx">✗</span> Scripts ilimitados</li>
+          <li><span class="cx">✗</span> Comentários por linha</li>
+          <li><span class="cx">✗</span> Múltiplas soluções</li>
+        </ul>
+        <!-- 👇 SUBSTITUA O LINK -->
+        <a href="SEU_LINK_DO_ARTIFACT_AQUI" target="_blank" class="plan-btn free">USAR GRÁTIS</a>
+      </div>
+      <div class="plan vip reveal">
+        <div class="plan-badge">MAIS POPULAR</div>
+        <div class="plan-name">MODO VIP</div>
+        <div class="plan-price"><sup>R$</sup> 4,75</div>
+        <div class="plan-period">pagamento único via Pix</div>
+        <ul class="plan-feats">
+          <li><span class="ck">✓</span> Chat ilimitado</li>
+          <li><span class="ck">✓</span> Scripts <strong style="color:#ffd84d">ilimitados</strong></li>
+          <li><span class="ck">✓</span> Análise de imagens</li>
+          <li><span class="ck">✓</span> Python, JS, PowerShell</li>
+          <li><span class="ck">✓</span> Comentários em cada linha</li>
+          <li><span class="ck">✓</span> Múltiplas soluções</li>
+          <li><span class="ck">✓</span> Prioridade máxima</li>
+        </ul>
+        <button class="plan-btn gold" onclick="openModal()">★ ATIVAR VIP AGORA</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">YADLE<span>AI</span></div>
+  <div class="foot-copy">© 2025 YADLE AI. Todos os direitos reservados.</div>
+</footer>
+
+<!-- PIX MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-eye">★ ATIVAR MODO VIP</div>
+    <h2>Pague via <span>Pix</span><br>e ative agora</h2>
+    <p>Faça o Pix abaixo, envie o comprovante e receba seu código VIP para ativar direto no chat.</p>
+    <div class="pix-card">
+      <div class="pix-sub">CHAVE PIX — ALEATÓRIA</div>
+      <div class="pix-key" id="pixKey">790d9850-334c-43fb-a64c-1b3d83c57098</div>
+      <div class="pix-val"><sup>R$</sup> 4,75</div>
+    </div>
+    <button class="copy-btn" id="copyBtn" onclick="copyKey()">📋 COPIAR CHAVE PIX</button>
+    <div class="divider">APÓS PAGAR</div>
+    <div class="contact-box">
+      <span style="font-size:1.5rem">💬</span>
+      <div>
+        <strong>Envie o comprovante</strong>
+        Entre em contato e mande o print do pagamento para receber o código VIP.
+      </div>
+    </div>
+    <div class="modal-note">
+      Você receberá um código secreto para ativar o VIP direto no chat.<br>
+      Ativação imediata após confirmação. ⚡
+    </div>
+  </div>
+</div>
+
+<script>
+// Modal
+function openModal(){ document.getElementById('overlay').classList.add('open') }
+function closeModal(){ document.getElementById('overlay').classList.remove('open') }
+document.getElementById('overlay').addEventListener('click', function(e){ if(e.target===this) closeModal() })
+
+// Copiar Pix
+function copyKey(){
+  navigator.clipboard.writeText(document.getElementById('pixKey').textContent).then(()=>{
+    const b = document.getElementById('copyBtn')
+    b.textContent = '✅ COPIADO!'
+    b.classList.add('copied')
+    setTimeout(()=>{ b.textContent='📋 COPIAR CHAVE PIX'; b.classList.remove('copied') }, 2000)
+  })
+}
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in') })
+},{threshold:0.1})
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
+</script>
+</body>
+</html>
