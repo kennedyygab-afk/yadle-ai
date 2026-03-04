@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YADLE AI — Inteligência Artificial de Elite</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0eb;
+  --dark: #0d0d0d;
+  --pink: #ff3cac;
+  --cyan: #00e5ff;
+  --yellow: #ffe600;
+  --green: #00ff88;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --muted: #888;
+  /* chat vars */
+  --cbg: #07090e;
+  --csurface: #0c0f18;
+  --ccard: #101520;
+  --cborder: #1a2235;
+  --cgold: #ffd84d;
+  --ctext: #c4d0e8;
+  --cmuted: #4a5a72;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+/* PAGES */
+#page-site { display:block; }
+#page-chat { display:none; }
+
+body { font-family:'DM Sans',sans-serif; overflow-x:hidden; }
+
+/* ===================== SITE ===================== */
+.site-wrap { background:var(--bg); color:var(--text); }
+
+body.site-wrap::before,
+.site-wrap::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.5;
+}
+
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 40px;
+  background:rgba(245,240,235,0.9);
+  backdrop-filter:blur(20px);
+  border-bottom:2px solid var(--dark);
+}
+.nav-logo { font-family:'Syne',sans-serif; font-weight:900; font-size:1.4rem; color:var(--dark); letter-spacing:-0.02em; cursor:pointer; }
+.nav-logo span { color:var(--pink); }
+.nav-cta {
+  background:var(--dark); color:#fff;
+  font-family:'Syne',sans-serif; font-weight:700; font-size:0.75rem; letter-spacing:0.1em;
+  padding:10px 22px; border:none; cursor:pointer; text-decoration:none; display:inline-block;
+  transition:background 0.2s, transform 0.15s;
+  clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+.nav-cta:hover { background:var(--pink); transform:translateY(-2px); }
+
+.hero {
+  min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:120px 40px 80px; position:relative; overflow:hidden; text-align:center;
+}
+.blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.35; pointer-events:none; animation:drift 8s ease-in-out infinite alternate; }
+.blob-1 { width:500px; height:500px; background:var(--pink); top:-100px; left:-100px; }
+.blob-2 { width:400px; height:400px; background:var(--cyan); bottom:-80px; right:-80px; animation-delay:-3s; }
+.blob-3 { width:300px; height:300px; background:var(--yellow); top:50%; left:50%; animation:drift2 10s ease-in-out infinite alternate; }
+@keyframes drift { from{transform:translate(0,0) scale(1)} to{transform:translate(30px,20px) scale(1.08)} }
+@keyframes drift2 { from{transform:translate(-50%,-50%) scale(1)} to{transform:translate(calc(-50% + 20px),calc(-50% + 30px)) scale(1.1)} }
+
+.hero-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--dark); color:#fff;
+  font-size:0.68rem; letter-spacing:0.2em; font-weight:500;
+  padding:7px 16px; margin-bottom:28px;
+  animation:fadeDown 0.6s ease both; position:relative; z-index:1;
+}
+.hero-tag .dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:blink 1.4s step-end infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+h1 {
+  font-family:'Syne',sans-serif; font-weight:900;
+  font-size:clamp(3rem,8vw,7rem); line-height:1; letter-spacing:-0.04em;
+  color:var(--dark); position:relative; z-index:1;
+  animation:fadeUp 0.7s ease 0.1s both;
+}
+h1 em { font-style:normal; color:var(--pink); }
+h1 .outline { -webkit-text-stroke:3px var(--dark); color:transparent; }
+
+.hero-sub {
+  font-size:clamp(1rem,2vw,1.2rem); color:var(--muted); max-width:520px; line-height:1.7;
+  margin:24px auto 40px; font-weight:300; animation:fadeUp 0.7s ease 0.2s both; position:relative; z-index:1;
+}
+.hero-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; animation:fadeUp 0.7s ease 0.3s both; position:relative; z-index:1; }
+.btn-primary {
+  background:var(--pink); color:#fff; font-family:'Syne',sans-serif; font-weight:800;
+  font-size:0.9rem; letter-spacing:0.06em; padding:16px 36px; border:none; cursor:pointer;
+  text-decoration:none; display:inline-block;
+  transition:transform 0.15s, box-shadow 0.2s; box-shadow:4px 4px 0 var(--dark);
+}
+.btn-primary:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--dark); }
+.btn-secondary {
+  background:transparent; color:var(--dark); font-family:'Syne',sans-serif; font-weight:700;
+  font-size:0.9rem; letter-spacing:0.06em; padding:15px 36px; border:2px solid var(--dark); cursor:pointer;
+  text-decoration:none; display:inline-block; transition:background 0.2s, color 0.2s;
+}
+.btn-secondary:hover { background:var(--dark); color:#fff; }
+
+.hero-stats {
+  display:flex; gap:40px; justify-content:center; flex-wrap:wrap;
+  margin-top:70px; padding-top:40px; border-top:2px solid var(--dark);
+  position:relative; z-index:1; animation:fadeUp 0.7s ease 0.4s both;
+}
+.stat { text-align:center; }
+.stat-num { font-family:'Syne',sans-serif; font-weight:900; font-size:2.2rem; color:var(--dark); line-height:1; }
+.stat-num span { color:var(--pink); }
+.stat-label { font-size:0.7rem; color:var(--muted); letter-spacing:0.1em; margin-top:4px; }
+
+.marquee-wrap { background:var(--dark); padding:14px 0; overflow:hidden; position:relative; z-index:1; }
+.marquee-track { display:flex; white-space:nowrap; animation:marquee 20s linear infinite; }
+.marquee-track span { font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; letter-spacing:0.1em; color:#fff; padding:0 30px; }
+.marquee-track span.accent { color:var(--yellow); }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+.features { padding:100px 40px; max-width:1200px; margin:0 auto; position:relative; z-index:1; }
+.section-tag { font-size:0.68rem; letter-spacing:0.2em; color:var(--muted); font-weight:500; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+.section-tag::before { content:''; width:30px; height:2px; background:var(--pink); }
+.section-title { font-family:'Syne',sans-serif; font-weight:900; font-size:clamp(2rem,5vw,3.5rem); line-height:1.1; letter-spacing:-0.03em; color:var(--dark); margin-bottom:60px; max-width:600px; }
+.section-title span { color:var(--pink); }
+
+.features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2px; }
+.feature-card { background:var(--card); padding:36px 32px; border:2px solid var(--dark); position:relative; overflow:hidden; transition:transform 0.2s; }
+.feature-card:hover { transform:translate(-3px,-3px); }
+.feature-card::after { content:''; position:absolute; bottom:0; right:0; width:80px; height:80px; background:var(--acc,var(--pink)); opacity:0.08; border-radius:50%; transform:translate(30px,30px); }
+.feature-card:nth-child(1){--acc:var(--pink)} .feature-card:nth-child(2){--acc:var(--cyan)} .feature-card:nth-child(3){--acc:var(--yellow)} .feature-card:nth-child(4){--acc:var(--green)}
+.feature-icon { font-size:2rem; margin-bottom:16px; display:block; }
+.feature-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; color:var(--dark); margin-bottom:10px; }
+.feature-desc { font-size:0.85rem; color:var(--muted); line-height:1.7; }
+
+.preview-section { padding:100px 40px; background:var(--dark); position:relative; z-index:1; text-align:center; }
+.preview-section .section-tag { justify-content:center; color:#555; }
+.preview-section .section-tag::before { background:var(--cyan); }
+.preview-section .section-title { color:#fff; margin:0 auto 50px; text-align:center; }
+.preview-section .section-title span { color:var(--cyan); }
+
+.chat-preview { max-width:680px; margin:0 auto; background:#0a0a0a; border:2px solid #1a1a1a; text-align:left; overflow:hidden; }
+.chat-topbar { background:#111; padding:14px 20px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #1a1a1a; }
+.chat-dots { display:flex; gap:6px; }
+.chat-dots span { width:10px; height:10px; border-radius:50%; }
+.chat-dots span:nth-child(1){background:#ff5f57} .chat-dots span:nth-child(2){background:#febc2e} .chat-dots span:nth-child(3){background:#28c840}
+.chat-title-bar { font-family:'Syne',sans-serif; font-weight:700; font-size:0.75rem; color:#555; margin-left:8px; letter-spacing:0.1em; }
+.chat-body { padding:24px 20px; display:flex; flex-direction:column; gap:16px; }
+.chat-msg { display:flex; gap:12px; max-width:85%; }
+.chat-msg.user { align-self:flex-end; flex-direction:row-reverse; }
+.chat-avatar { width:32px; height:32px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.85rem; border:1px solid #1a1a1a; background:#111; align-self:flex-end; }
+.chat-bubble { padding:12px 16px; font-size:0.78rem; line-height:1.7; font-family:'DM Sans',sans-serif; color:#ccc; border:1px solid #1a1a1a; background:#111; }
+.chat-msg.user .chat-bubble { background:#0d1a2a; border-color:#1a3050; color:#c4d0e8; }
+.chat-bubble code { display:block; background:#050709; border:1px solid #222; padding:12px; margin:8px 0; font-size:0.7rem; color:#00ff88; font-family:'Space Mono',monospace; line-height:1.6; white-space:pre; }
+
+.how { padding:100px 40px; max-width:1200px; margin:0 auto; position:relative; z-index:1; }
+.steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0; margin-top:60px; }
+.step { padding:40px 32px; border:2px solid var(--dark); margin-right:-2px; margin-bottom:-2px; background:var(--card); }
+.step-num { font-family:'Syne',sans-serif; font-weight:900; font-size:3.5rem; color:var(--dark); opacity:0.08; line-height:1; margin-bottom:12px; }
+.step-icon { font-size:1.8rem; margin-bottom:12px; display:block; }
+.step-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; margin-bottom:8px; }
+.step-desc { font-size:0.82rem; color:var(--muted); line-height:1.6; }
+
+.pricing { padding:100px 40px; background:var(--dark); position:relative; z-index:1; overflow:hidden; }
+.pricing-inner { max-width:900px; margin:0 auto; }
+.pricing .section-tag { color:#555; }
+.pricing .section-tag::before { background:var(--yellow); }
+.pricing .section-title { color:#fff; }
+.pricing .section-title span { color:var(--yellow); }
+.plans { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.plan { padding:40px 36px; border:2px solid #333; position:relative; }
+.plan.vip { border-color:var(--yellow); background:linear-gradient(135deg,#1a1400,#0d0d0d); }
+.plan-badge { position:absolute; top:-14px; left:32px; background:var(--yellow); color:#000; font-family:'Syne',sans-serif; font-weight:800; font-size:0.62rem; letter-spacing:0.15em; padding:5px 14px; }
+.plan-name { font-family:'Syne',sans-serif; font-weight:800; font-size:0.8rem; letter-spacing:0.15em; color:#555; margin-bottom:16px; }
+.plan.vip .plan-name { color:var(--yellow); }
+.plan-price { font-family:'Syne',sans-serif; font-weight:900; font-size:3rem; color:#fff; line-height:1; margin-bottom:8px; }
+.plan-price sup { font-size:1rem; color:#888; }
+.plan-period { font-size:0.75rem; color:#555; margin-bottom:28px; }
+.plan-features { list-style:none; margin-bottom:32px; }
+.plan-features li { font-size:0.82rem; color:#888; padding:8px 0; border-bottom:1px solid #1a1a1a; display:flex; align-items:center; gap:10px; }
+.plan.vip .plan-features li { color:#ccc; border-color:#1f1f00; }
+.plan-features .check { color:var(--green); } .plan-features .cross { color:#333; }
+.plan.vip .plan-features .check { color:var(--yellow); }
+.btn-plan { width:100%; padding:14px; border:none; cursor:pointer; font-family:'Syne',sans-serif; font-weight:800; font-size:0.82rem; letter-spacing:0.1em; transition:all 0.2s; }
+.btn-plan.free { background:#1a1a1a; color:#555; }
+.btn-plan.free:hover { background:#222; color:#fff; }
+.btn-plan.gold { background:var(--yellow); color:#000; box-shadow:4px 4px 0 #5a4d00; }
+.btn-plan.gold:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 #5a4d00; }
+
+footer { background:var(--dark); border-top:2px solid #111; padding:40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px; position:relative; z-index:1; }
+.footer-logo { font-family:'Syne',sans-serif; font-weight:900; font-size:1.2rem; color:#fff; cursor:pointer; }
+.footer-logo span { color:var(--pink); }
+.footer-copy { font-size:0.72rem; color:#333; }
+
+/* MODAL PIX */
+.modal-overlay { position:fixed; inset:0; background:#000000cc; z-index:200; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); opacity:0; pointer-events:none; transition:opacity 0.3s; }
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal { background:#fff; max-width:440px; width:90%; border:3px solid var(--dark); padding:44px 40px; position:relative; transform:scale(0.95); transition:transform 0.3s; box-shadow:8px 8px 0 var(--dark); }
+.modal-overlay.open .modal { transform:scale(1); }
+.modal-close { position:absolute; top:16px; right:20px; background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--muted); }
+.modal-eyebrow { font-size:0.62rem; letter-spacing:0.2em; color:var(--muted); font-weight:500; margin-bottom:10px; }
+.modal h2 { font-family:'Syne',sans-serif; font-weight:900; font-size:1.8rem; color:var(--dark); margin-bottom:8px; line-height:1.1; }
+.modal h2 span { color:var(--pink); }
+.modal p { font-size:0.8rem; color:var(--muted); line-height:1.7; margin-bottom:24px; }
+.pix-card { background:var(--dark); padding:24px; text-align:center; margin-bottom:20px; position:relative; overflow:hidden; }
+.pix-eyebrow { font-size:0.58rem; letter-spacing:0.2em; color:#555; margin-bottom:8px; }
+.pix-key { font-size:0.78rem; color:var(--yellow); letter-spacing:0.04em; word-break:break-all; margin-bottom:12px; }
+.pix-amount { font-family:'Syne',sans-serif; font-weight:900; font-size:2.8rem; color:#fff; line-height:1; }
+.pix-amount sup { font-size:1rem; color:var(--yellow); }
+.copy-btn { width:100%; padding:11px; margin-top:10px; background:transparent; border:1px solid #333; color:#888; font-family:'Syne',sans-serif; font-weight:700; font-size:0.68rem; letter-spacing:0.1em; cursor:pointer; transition:all 0.2s; }
+.copy-btn:hover { background:#1a1a1a; color:#fff; border-color:#555; }
+.modal-divider { display:flex; align-items:center; gap:12px; margin:20px 0; font-size:0.68rem; color:var(--muted); letter-spacing:0.1em; }
+.modal-divider::before,.modal-divider::after { content:''; flex:1; height:1px; background:#e5e5e5; }
+.contact-box { background:#f5f5f5; padding:16px 20px; display:flex; align-items:center; gap:14px; margin-bottom:16px; border:1px solid #e0e0e0; }
+.contact-icon { font-size:1.4rem; flex-shrink:0; }
+.contact-text { font-size:0.78rem; color:#333; line-height:1.5; }
+.contact-text strong { font-family:'Syne',sans-serif; display:block; font-size:0.85rem; color:#000; }
+.modal-note { font-size:0.65rem; color:var(--muted); text-align:center; line-height:1.7; }
+
+/* reveal */
+.reveal { opacity:0; transform:translateY(30px); transition:opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+
+/* ===================== CHAT ===================== */
+#page-chat {
+  background:var(--cbg); color:var(--ctext); font-family:'Space Mono',monospace;
+  height:100vh; flex-direction:column; overflow:hidden; position:relative;
+}
+#page-chat::before {
+  content:''; position:fixed; inset:0;
+  background-image:linear-gradient(rgba(0,229,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.025) 1px,transparent 1px);
+  background-size:40px 40px; pointer-events:none; z-index:0;
+}
+.c-topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 20px; border-bottom:1px solid var(--cborder);
+  background:#07090eee; backdrop-filter:blur(10px);
+  position:relative; z-index:10; flex:none;
+}
+.c-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; color:#fff; letter-spacing:0.06em; cursor:pointer; }
+.c-logo span { color:var(--cyan); }
+.c-back { background:none; border:1px solid var(--cborder); color:var(--cmuted); font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; padding:7px 14px; cursor:pointer; transition:all 0.2s; }
+.c-back:hover { border-color:var(--cyan); color:var(--cyan); }
+.c-mode { display:flex; align-items:center; gap:7px; padding:6px 14px; font-size:0.62rem; letter-spacing:0.18em; font-weight:700; border:1px solid; }
+.c-mode.free { border-color:var(--cborder); color:var(--cmuted); background:var(--csurface); }
+.c-mode.vip  { border-color:#ffd84d55; color:var(--cgold); background:#1a1400; box-shadow:0 0 20px #ffd84d44; }
+.c-mode .dot { width:7px; height:7px; border-radius:50%; animation:blink 1.4s step-end infinite; }
+.c-mode.free .dot { background:var(--cmuted); }
+.c-mode.vip  .dot { background:var(--cgold); }
+.c-vip-btn { background:none; border:1px solid #ffd84d33; color:var(--cgold); font-family:'Space Mono',monospace; font-size:0.62rem; letter-spacing:0.14em; padding:7px 14px; cursor:pointer; }
+
+.c-messages { flex:1; overflow-y:auto; padding:24px 20px 12px; display:flex; flex-direction:column; gap:16px; position:relative; z-index:1; scrollbar-width:thin; scrollbar-color:var(--cborder) transparent; }
+
+.bubble-wrap { display:flex; gap:12px; max-width:760px; align-self:flex-start; animation:fadeUp 0.3s ease; }
+.bubble-wrap.user { align-self:flex-end; flex-direction:row-reverse; }
+.c-avatar { flex:none; width:36px; height:36px; border:1px solid var(--cborder); background:var(--ccard); display:flex; align-items:center; justify-content:center; font-size:0.9rem; align-self:flex-end; }
+.bubble-wrap.vip-msg .c-avatar { border-color:#ffd84d44; background:#1a1400; }
+.bubble { background:var(--ccard); border:1px solid var(--cborder); padding:14px 18px; font-size:0.78rem; line-height:1.85; max-width:560px; position:relative; }
+.bubble-wrap.user .bubble { background:#0d1a2a; border-color:#1a3050; color:#d4e4f8; }
+.bubble-wrap.vip-msg .bubble { border-color:#ffd84d22; background:#0f1108; }
+.bubble-wrap.vip-msg .bubble::before { content:''; position:absolute; top:-1px; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--cgold),transparent); }
+.bubble code { display:block; background:#050709; border:1px solid var(--cborder); padding:14px; margin:10px 0; font-size:0.72rem; color:var(--green); white-space:pre-wrap; overflow-x:auto; line-height:1.7; }
+.bubble-label { font-size:0.58rem; letter-spacing:0.16em; color:var(--cmuted); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.bubble-wrap.vip-msg .bubble-label { color:var(--cgold); }
+.bubble-label::before { content:''; width:16px; height:1px; background:currentColor; }
+
+.c-typing { display:flex; gap:5px; align-items:center; padding:14px 18px; background:var(--ccard); border:1px solid var(--cborder); width:fit-content; }
+.c-typing span { width:6px; height:6px; background:var(--cyan); border-radius:50%; animation:bounce 1.2s ease-in-out infinite; }
+.c-typing span:nth-child(2){animation-delay:0.15s} .c-typing span:nth-child(3){animation-delay:0.3s}
+@keyframes bounce{0%,80%,100%{transform:scale(0.7);opacity:0.4}40%{transform:scale(1);opacity:1}}
+
+.upgrade-card { margin-top:12px; border:1px solid #ffd84d44; background:#0f1108; padding:14px 16px; }
+.upgrade-card .uc-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; color:var(--cgold); margin-bottom:6px; }
+.upgrade-card .uc-desc { font-size:0.72rem; color:var(--cmuted); line-height:1.7; }
+.upgrade-card .uc-btn { margin-top:12px; background:var(--cgold); color:#000; border:none; padding:9px 18px; font-family:'Syne',sans-serif; font-weight:700; font-size:0.72rem; letter-spacing:0.08em; cursor:pointer; }
+
+.c-input-area { border-top:1px solid var(--cborder); padding:14px 20px 18px; background:#07090eee; backdrop-filter:blur(10px); position:relative; z-index:10; flex:none; }
+.c-input-row { display:flex; gap:10px; align-items:flex-end; }
+.c-attach { flex:none; width:42px; height:42px; background:var(--ccard); border:1px solid var(--cborder); color:var(--cmuted); font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+.c-attach:hover { border-color:var(--cyan); color:var(--cyan); }
+.c-textarea { flex:1; background:var(--ccard); border:1px solid var(--cborder); color:var(--ctext); font-family:'Space Mono',monospace; font-size:0.78rem; padding:12px 14px; resize:none; outline:none; line-height:1.6; min-height:42px; max-height:120px; }
+.c-textarea:focus { border-color:var(--cyan); }
+.c-textarea::placeholder { color:var(--cmuted); }
+.c-send { flex:none; width:42px; height:42px; background:var(--cyan); border:none; color:#000; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.c-send:disabled { opacity:0.4; cursor:not-allowed; }
+.c-hint { font-size:0.6rem; color:var(--cmuted); margin-top:8px; display:flex; justify-content:space-between; }
+.c-hint .vip-h { color:var(--cgold); cursor:pointer; }
+
+.c-welcome { text-align:center; padding:32px 20px; color:var(--cmuted); font-size:0.75rem; line-height:2; }
+.c-welcome .wt { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; color:#fff; margin-bottom:10px; }
+.c-welcome .wt span { color:var(--cyan); }
+.c-chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:16px; }
+.c-chip { background:var(--ccard); border:1px solid var(--cborder); padding:8px 14px; font-size:0.68rem; cursor:pointer; color:var(--ctext); font-family:'Space Mono',monospace; }
+.c-chip:hover { border-color:var(--cyan); color:var(--cyan); }
+
+.img-preview-wrap { position:relative; display:inline-block; margin-bottom:10px; }
+.img-preview-wrap img { max-height:80px; border:1px solid var(--cborder); display:block; }
+.img-preview-wrap .rm { position:absolute; top:-8px; right:-8px; width:18px; height:18px; background:#ff4d6d; color:#fff; border:none; font-size:0.7rem; cursor:pointer; }
+
+/* VIP MODAL (chat) */
+.vip-modal-overlay { position:fixed; inset:0; background:#000000bb; z-index:300; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:opacity 0.3s; }
+.vip-modal-overlay.open { opacity:1; pointer-events:all; }
+.vip-modal { background:var(--csurface); border:1px solid #ffd84d44; padding:40px; max-width:420px; width:90%; box-shadow:0 0 60px #ffd84d22; position:relative; transform:translateY(20px); transition:transform 0.3s; }
+.vip-modal-overlay.open .vip-modal { transform:translateY(0); }
+.vip-modal-close { position:absolute; top:14px; right:18px; background:none; border:none; color:var(--cmuted); font-size:1.2rem; cursor:pointer; font-family:'Space Mono',monospace; }
+.vip-modal h2 { font-family:'Syne',sans-serif; font-weight:800; font-size:1.6rem; color:#fff; margin-bottom:6px; }
+.vip-modal h2 span { color:var(--cgold); }
+.vip-modal p { font-size:0.75rem; color:var(--cmuted); line-height:1.8; margin-bottom:20px; }
+.vpix-box { background:#050709; border:1px solid #ffd84d33; padding:16px; text-align:center; margin-bottom:16px; }
+.vpix-label { font-size:0.6rem; letter-spacing:0.18em; color:var(--cmuted); margin-bottom:8px; }
+.vpix-key { font-size:0.85rem; color:var(--cgold); letter-spacing:0.06em; word-break:break-all; }
+.vpix-amount { font-family:'Syne',sans-serif; font-weight:800; font-size:2rem; color:#fff; margin-top:8px; }
+.vpix-amount sup { font-size:0.9rem; color:var(--cgold); }
+.vcode-input { width:100%; background:#050709; border:1px solid var(--cborder); padding:12px 14px; color:#fff; font-family:'Space Mono',monospace; font-size:0.8rem; outline:none; letter-spacing:0.1em; }
+.vcode-input:focus { border-color:var(--cgold); }
+.vcode-input::placeholder { color:var(--cmuted); }
+.vmodal-btn { width:100%; margin-top:10px; background:var(--cgold); color:#000; border:none; padding:13px; font-family:'Syne',sans-serif; font-weight:700; font-size:0.82rem; letter-spacing:0.1em; cursor:pointer; }
+.vmodal-note { font-size:0.62rem; color:var(--cmuted); text-align:center; margin-top:10px; line-height:1.6; }
+
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .hero{padding:100px 20px 60px}
+  h1{font-size:clamp(2.5rem,10vw,4rem)}
+  .features,.how,.preview-section,.pricing{padding:60px 20px}
+  .hero-stats{gap:24px}
+  footer{padding:30px 20px}
+  .modal{padding:32px 24px}
+  .plans{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== SITE PAGE ==================== -->
+<div id="page-site" class="site-wrap">
+
+<nav>
+  <div class="nav-logo" onclick="goSite()">YADLE<span>AI</span></div>
+  <a href="#pricing" class="nav-cta">★ ASSINAR VIP</a>
+</nav>
+
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="hero-tag"><div class="dot"></div>INTELIGÊNCIA ARTIFICIAL ONLINE AGORA</div>
+  <h1>A AI que<br><em>resolve</em> de<br><span class="outline">verdade</span></h1>
+  <p class="hero-sub">Scripts, automações, análise de imagens e muito mais. Rápida, precisa e sem enrolação — do grátis ao VIP.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="goChat()">🚀 USAR GRÁTIS AGORA</button>
+    <a href="#pricing" class="btn-secondary">VER PLANOS</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">10<span>k+</span></div><div class="stat-label">SCRIPTS GERADOS</div></div>
+    <div class="stat"><div class="stat-num">99<span>%</span></div><div class="stat-label">UPTIME</div></div>
+    <div class="stat"><div class="stat-num">R$<span>4,75</span></div><div class="stat-label">PLANO VIP</div></div>
+    <div class="stat"><div class="stat-num"><span>&lt;</span>2s</div><div class="stat-label">RESPOSTA</div></div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>PYTHON</span><span class="accent">★</span><span>POWERSHELL</span><span class="accent">★</span><span>JAVASCRIPT</span><span class="accent">★</span><span>ANÁLISE DE IMAGEM</span><span class="accent">★</span><span>SCRIPTS .BAT</span><span class="accent">★</span><span>OTIMIZAÇÃO WINDOWS</span><span class="accent">★</span><span>AUTOMAÇÃO</span><span class="accent">★</span>
+    <span>PYTHON</span><span class="accent">★</span><span>POWERSHELL</span><span class="accent">★</span><span>JAVASCRIPT</span><span class="accent">★</span><span>ANÁLISE DE IMAGEM</span><span class="accent">★</span><span>SCRIPTS .BAT</span><span class="accent">★</span><span>OTIMIZAÇÃO WINDOWS</span><span class="accent">★</span><span>AUTOMAÇÃO</span><span class="accent">★</span>
+  </div>
+</div>
+
+<section class="features">
+  <div class="section-tag">O QUE ELA FAZ</div>
+  <h2 class="section-title reveal">Tudo que você precisa, <span>num só lugar</span></h2>
+  <div class="features-grid">
+    <div class="feature-card reveal"><span class="feature-icon">🐍</span><div class="feature-title">Scripts Python & JS</div><div class="feature-desc">Automatize tarefas, renomeie arquivos, faça scraping, crie bots — qualquer script que você precisar.</div></div>
+    <div class="feature-card reveal"><span class="feature-icon">🛡️</span><div class="feature-title">PowerShell & .bat</div><div class="feature-desc">Scripts Windows com ponto de restauração automático. Otimize, limpe e gerencie seu sistema.</div></div>
+    <div class="feature-card reveal"><span class="feature-icon">🖼️</span><div class="feature-title">Análise de Imagens</div><div class="feature-desc">Envie uma foto e a YADLE AI lê, interpreta e resolve — OCR, diagnóstico, código em imagem e mais.</div></div>
+    <div class="feature-card reveal"><span class="feature-icon">⚡</span><div class="feature-title">Respostas Instantâneas</div><div class="feature-desc">Sem espera, sem travamento. A YADLE AI responde em menos de 2 segundos, direto ao ponto.</div></div>
+  </div>
+</section>
+
+<section class="preview-section">
+  <div class="section-tag">VEJA NA PRÁTICA</div>
+  <h2 class="section-title reveal">A AI em <span>ação</span></h2>
+  <div class="chat-preview reveal">
+    <div class="chat-topbar"><div class="chat-dots"><span></span><span></span><span></span></div><div class="chat-title-bar">YADLE AI — CHAT</div></div>
+    <div class="chat-body">
+      <div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">Cria um script Python pra renomear todos os arquivos de uma pasta adicionando a data no nome</div></div>
+      <div class="chat-msg"><div class="chat-avatar">🤖</div><div class="chat-bubble">Claro! Aqui está o script:<code>import os
+from datetime import datetime
+
+pasta = r"C:\SuaPasta"
+data = datetime.now().strftime("%Y%m%d")
+
+for arquivo in os.listdir(pasta):
+    nome, ext = os.path.splitext(arquivo)
+    novo = f"{data}_{nome}{ext}"
+    os.rename(os.path.join(pasta, arquivo),
+              os.path.join(pasta, novo))</code>Só altere o caminho e execute. ✅</div></div>
+      <div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">Perfeito! Agora com comentário em cada linha 🔥</div></div>
+      <div class="chat-msg"><div class="chat-avatar">★</div><div class="chat-bubble" style="border-color:#ffd84d22;background:#0f1108"><span style="color:#ffd84d;font-size:0.65rem">★ MODO VIP</span><br><br>Versão com comentários detalhados em cada linha — disponível no Modo VIP! 🚀</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="section-tag">COMO FUNCIONA</div>
+  <h2 class="section-title reveal">Simples assim, <span>sem complicação</span></h2>
+  <div class="steps">
+    <div class="step reveal"><div class="step-num">01</div><span class="step-icon">💬</span><div class="step-title">Acesse o Chat</div><div class="step-desc">Clique em "Usar Grátis Agora" e comece a conversar. Sem cadastro.</div></div>
+    <div class="step reveal"><div class="step-num">02</div><span class="step-icon">✍️</span><div class="step-title">Envie sua Dúvida</div><div class="step-desc">Digite ou envie uma foto. A YADLE AI entende tudo em português.</div></div>
+    <div class="step reveal"><div class="step-num">03</div><span class="step-icon">⚡</span><div class="step-title">Receba a Solução</div><div class="step-desc">Script pronto, explicação clara, em segundos. Copie e use.</div></div>
+    <div class="step reveal" style="background:var(--dark)"><div class="step-num" style="color:#ffd84d;opacity:0.15">04</div><span class="step-icon">★</span><div class="step-title" style="color:#ffd84d">Quer mais? VIP</div><div class="step-desc" style="color:#555">Pague R$ 4,75 via Pix e desbloqueie scripts ilimitados.</div></div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="pricing-inner">
+    <div class="section-tag">PLANOS</div>
+    <h2 class="section-title reveal">Escolha seu <span>plano</span></h2>
+    <div class="plans">
+      <div class="plan reveal">
+        <div class="plan-name">MODO GRÁTIS</div>
+        <div class="plan-price">R$ <sup>0</sup></div>
+        <div class="plan-period">para sempre grátis</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Chat ilimitado</li>
+          <li><span class="check">✓</span> Scripts até 10 linhas</li>
+          <li><span class="check">✓</span> Análise de imagens</li>
+          <li><span class="check">✓</span> Python, JS, PowerShell</li>
+          <li><span class="cross">✗</span> Scripts ilimitados</li>
+          <li><span class="cross">✗</span> Comentários por linha</li>
+          <li><span class="cross">✗</span> Múltiplas soluções</li>
+        </ul>
+        <button class="btn-plan free" onclick="goChat()">USAR GRÁTIS</button>
+      </div>
+      <div class="plan vip reveal">
+        <div class="plan-badge">MAIS POPULAR</div>
+        <div class="plan-name">MODO VIP</div>
+        <div class="plan-price"><sup>R$</sup> 4,75</div>
+        <div class="plan-period">pagamento único via Pix</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Chat ilimitado</li>
+          <li><span class="check">✓</span> Scripts <strong style="color:#ffd84d">ilimitados</strong></li>
+          <li><span class="check">✓</span> Análise de imagens</li>
+          <li><span class="check">✓</span> Python, JS, PowerShell</li>
+          <li><span class="check">✓</span> Comentários em cada linha</li>
+          <li><span class="check">✓</span> Múltiplas soluções</li>
+          <li><span class="check">✓</span> Prioridade máxima</li>
+        </ul>
+        <button class="btn-plan gold" onclick="openPixModal()">★ ATIVAR VIP AGORA</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo" onclick="goSite()">YADLE<span>AI</span></div>
+  <div class="footer-copy">© 2025 YADLE AI. Todos os direitos reservados.</div>
+</footer>
+
+<!-- PIX MODAL -->
+<div class="modal-overlay" id="pixModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closePixModal()">✕</button>
+    <div class="modal-eyebrow">★ ATIVAR MODO VIP</div>
+    <h2>Pague via <span>Pix</span> e ative agora</h2>
+    <p>Faça o Pix abaixo, envie o comprovante e receba seu código VIP.</p>
+    <div class="pix-card">
+      <div class="pix-eyebrow">CHAVE PIX (ALEATÓRIA)</div>
+      <div class="pix-key" id="pixKeyText">790d9850-334c-43fb-a64c-1b3d83c57098</div>
+      <div class="pix-amount"><sup>R$</sup> 4,75</div>
+    </div>
+    <button class="copy-btn" id="copyBtn" onclick="copyPix()">📋 COPIAR CHAVE PIX</button>
+    <div class="modal-divider">APÓS PAGAR</div>
+    <div class="contact-box">
+      <div class="contact-icon">💬</div>
+      <div class="contact-text"><strong>Envie o comprovante</strong>Entre em contato e mande o print do pagamento para receber o código VIP.</div>
+    </div>
+    <div class="modal-note">Você receberá um código secreto para ativar o VIP direto no chat.<br>Ativação imediata após confirmação. ⚡</div>
+  </div>
+</div>
+</div><!-- end #page-site -->
+
+<!-- ==================== CHAT PAGE ==================== -->
+<div id="page-chat">
+  <div class="c-topbar">
+    <div class="c-logo" onclick="goSite()">YADLE<span>AI</span></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <div class="c-mode free" id="cModePill"><div class="dot"></div><span id="cModeLabel">MODO GRÁTIS</span></div>
+      <button class="c-vip-btn" id="cVipBtn" onclick="openVipModal()">★ ATIVAR VIP</button>
+      <button class="c-back" onclick="goSite()">← VOLTAR</button>
+    </div>
+  </div>
+
+  <div class="c-messages" id="cMessages">
+    <div class="c-welcome" id="cWelcome">
+      <div class="wt">YADLE<span>AI</span> está online.</div>
+      Envie uma mensagem ou foto para começar.<br>Modo Grátis ativo — scripts até 10 linhas.
+      <div class="c-chips">
+        <div class="c-chip" onclick="sendChip('Crie um script Python para renomear arquivos em massa')">📄 Script Python</div>
+        <div class="c-chip" onclick="sendChip('Como otimizar o Windows 11 para melhor desempenho?')">⚡ Otimizar Windows</div>
+        <div class="c-chip" onclick="sendChip('Explique o que é kernel e como funciona')">🔧 O que é kernel?</div>
+        <div class="c-chip" onclick="sendChip('Crie um script PowerShell para criar ponto de restauração')">🛡 PowerShell</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="c-input-area">
+    <div id="cImgArea"></div>
+    <div class="c-input-row">
+      <button class="c-attach" onclick="document.getElementById('cFileInput').click()">📎</button>
+      <input type="file" id="cFileInput" accept="image/*" style="display:none" onchange="handleFile(event)">
+      <textarea class="c-textarea" id="cTextarea" placeholder="Digite sua mensagem ou envie uma foto..." rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"
+        oninput="autoResize(this)"></textarea>
+      <button class="c-send" id="cSendBtn" onclick="sendMessage()">➤</button>
+    </div>
+    <div class="c-hint">
+      <span>Enter para enviar · Shift+Enter nova linha</span>
+      <span class="vip-h" id="cHintRight" onclick="openVipModal()">★ VIP: scripts ilimitados</span>
+    </div>
+  </div>
+
+  <!-- VIP MODAL (chat) -->
+  <div class="vip-modal-overlay" id="vipModal">
+    <div class="vip-modal">
+      <button class="vip-modal-close" onclick="closeVipModal()">✕</button>
+      <div style="font-size:0.6rem;letter-spacing:0.2em;color:var(--cgold);margin-bottom:12px">★ MODO VIP</div>
+      <h2>Ative o <span>VIP</span><br>por R$ 4,75</h2>
+      <p>Scripts ilimitados, comentários em cada linha e múltiplas soluções. Pague via Pix e insira o código secreto.</p>
+      <div class="vpix-box">
+        <div class="vpix-label">CHAVE PIX</div>
+        <div class="vpix-key">790d9850-334c-43fb-a64c-1b3d83c57098</div>
+        <div class="vpix-amount"><sup>R$</sup> 4,75</div>
+      </div>
+      <input class="vcode-input" id="vCodeInput" placeholder="CÓDIGO SECRETO VIP..." maxlength="20">
+      <button class="vmodal-btn" onclick="activateVIP()">ATIVAR MODO VIP</button>
+      <div class="vmodal-note">Após pagar, envie o comprovante para receber o código secreto.<br><br><span style="color:#2a3a52;font-size:0.6rem">código demo: YADLE2025</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let isVIP = false;
+let pendingImage = null;
+let conversationHistory = [];
+const SECRET = 'YADLE2025';
+
+// ── NAVIGATION ──
+function goChat() {
+  document.getElementById('page-site').style.display = 'none';
+  const chat = document.getElementById('page-chat');
+  chat.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function goSite() {
+  document.getElementById('page-chat').style.display = 'none';
+  document.getElementById('page-site').style.display = 'block';
+  document.body.style.overflow = '';
+}
+
+// ── PIX MODAL (site) ──
+function openPixModal() { document.getElementById('pixModal').classList.add('open'); }
+function closePixModal() { document.getElementById('pixModal').classList.remove('open'); }
+document.getElementById('pixModal').addEventListener('click', e => { if(e.target===document.getElementById('pixModal')) closePixModal(); });
+function copyPix() {
+  navigator.clipboard.writeText('790d9850-334c-43fb-a64c-1b3d83c57098').then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✅ CHAVE COPIADA!';
+    btn.style.background = '#00ff88'; btn.style.color = '#000';
+    setTimeout(() => { btn.textContent = '📋 COPIAR CHAVE PIX'; btn.style.background=''; btn.style.color=''; }, 2000);
+  });
+}
+
+// ── VIP MODAL (chat) ──
+function openVipModal() { document.getElementById('vipModal').classList.add('open'); }
+function closeVipModal() { document.getElementById('vipModal').classList.remove('open'); }
+document.getElementById('vipModal').addEventListener('click', e => { if(e.target===document.getElementById('vipModal')) closeVipModal(); });
+
+function activateVIP() {
+  const code = document.getElementById('vCodeInput').value.trim().toUpperCase();
+  if (code === SECRET) {
+    isVIP = true; closeVipModal(); updateVIPUI();
+    appendBubble('yadle', `<div style="display:inline-flex;align-items:center;gap:5px;font-size:0.58rem;letter-spacing:0.14em;color:var(--cgold);border:1px solid #ffd84d33;padding:2px 8px;margin-bottom:8px">★ VIP ATIVADO</div><br>Modo VIP ativado! 🎉<br><br>Agora você tem:<br>• Scripts <strong style="color:var(--cgold)">ilimitados</strong><br>• Comentários detalhados em cada linha<br>• Múltiplas soluções<br><br>Me diga o que precisa! ✨`, true);
+  } else {
+    const inp = document.getElementById('vCodeInput');
+    inp.style.borderColor='#ff4d6d'; inp.placeholder='CÓDIGO INVÁLIDO — TENTE NOVAMENTE';
+    setTimeout(() => { inp.style.borderColor=''; inp.placeholder='CÓDIGO SECRETO VIP...'; }, 2000);
+  }
+}
+function updateVIPUI() {
+  const pill = document.getElementById('cModePill');
+  pill.className = 'c-mode vip';
+  document.getElementById('cModeLabel').textContent = '★ MODO VIP';
+  document.getElementById('cHintRight').textContent = '★ VIP ATIVO — SEM LIMITES';
+  document.getElementById('cHintRight').style.cursor = 'default';
+  document.getElementById('cHintRight').onclick = null;
+  document.getElementById('cVipBtn').style.display = 'none';
+}
+
+// ── FILE ──
+function handleFile(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingImage = { base64: ev.target.result.split(',')[1], mimeType: file.type, previewUrl: ev.target.result };
+    document.getElementById('cImgArea').innerHTML = `<div class="img-preview-wrap"><img src="${ev.target.result}"><button class="rm" onclick="removeImg()">✕</button></div>`;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+function removeImg() { pendingImage = null; document.getElementById('cImgArea').innerHTML = ''; }
+
+// ── SEND ──
+async function sendMessage() {
+  const ta = document.getElementById('cTextarea');
+  const text = ta.value.trim();
+  if (!text && !pendingImage) return;
+  document.getElementById('cSendBtn').disabled = true;
+
+  const welcome = document.getElementById('cWelcome');
+  if (welcome) welcome.remove();
+
+  let userHTML = '';
+  if (pendingImage) userHTML += `<img src="${pendingImage.previewUrl}" style="max-width:200px;max-height:160px;display:block;margin-bottom:8px;border:1px solid var(--cborder)">`;
+  if (text) userHTML += text;
+  appendBubble('user', userHTML);
+
+  const userContent = [];
+  if (pendingImage) userContent.push({ type:'image', source:{ type:'base64', media_type:pendingImage.mimeType, data:pendingImage.base64 } });
+  if (text) userContent.push({ type:'text', text });
+  conversationHistory.push({ role:'user', content: userContent });
+
+  ta.value = ''; autoResize(ta); removeImg();
+
+  // typing
+  const tid = 't_'+Date.now();
+  const msgs = document.getElementById('cMessages');
+  const tw = document.createElement('div');
+  tw.className='bubble-wrap'; tw.id=tid;
+  tw.innerHTML=`<div class="c-avatar">🤖</div><div class="c-typing"><span></span><span></span><span></span></div>`;
+  msgs.appendChild(tw); msgs.scrollTop=msgs.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system:buildPrompt(), messages:conversationHistory })
+    });
+    const data = await res.json();
+    document.getElementById(tid)?.remove();
+    const reply = data.content?.map(b=>b.text||'').join('') || 'Erro ao obter resposta.';
+    conversationHistory.push({ role:'assistant', content: reply });
+    appendBubble('yadle', formatReply(reply), isVIP);
+  } catch {
+    document.getElementById(tid)?.remove();
+    appendBubble('yadle', 'Erro ao conectar. Tente novamente.');
+  }
+  document.getElementById('cSendBtn').disabled = false;
+}
+
+function buildPrompt() {
+  return isVIP
+    ? `Você é a YADLE AI, IA de elite em scripts (Python, JS, PowerShell, .bat) e análise de imagens. MODO VIP ATIVO: scripts ilimitados, comentários em CADA linha, múltiplas abordagens, máximo detalhe. Scripts Windows: sempre inclua ponto de restauração. Responda em português brasileiro.`
+    : `Você é a YADLE AI, IA de elite em scripts (Python, JS, PowerShell, .bat) e análise de imagens. MODO GRÁTIS: limite scripts a 10 linhas. Se pedido avançado, entregue solução parcial e adicione ao final:\n\n---UPGRADE---\nNotei que este pedido é avançado. Para scripts ilimitados com comentários detalhados, ative o Modo VIP por R$ 4,75.\n---FIM---\n\nScripts Windows: sempre inclua ponto de restauração. Responda em português brasileiro.`;
+}
+
+function formatReply(text) {
+  let html = text;
+  const up = html.match(/---UPGRADE---([\s\S]*?)---FIM---/);
+  if (up) {
+    html = html.replace(/---UPGRADE---([\s\S]*?)---FIM---/,
+      `<div class="upgrade-card"><div class="uc-title">★ Desbloquear Modo VIP</div><div class="uc-desc">${up[1].trim()}</div><button class="uc-btn" onclick="openVipModal()">ATIVAR VIP — R$ 4,75</button></div>`);
+  }
+  html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_,_l,c) => `<code>${esc(c.trim())}</code>`);
+  html = html.replace(/`([^`]+)`/g, (_,c) => `<code style="display:inline;padding:1px 5px">${esc(c)}</code>`);
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong style="color:#e0ecff">$1</strong>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function appendBubble(role, html, vip=false) {
+  const msgs = document.getElementById('cMessages');
+  const w = document.createElement('div');
+  w.className = 'bubble-wrap'+(role==='user'?' user':'')+(vip?' vip-msg':'');
+  if (role !== 'user') {
+    w.innerHTML = `<div class="c-avatar">${vip?'★':'🤖'}</div><div><div class="bubble-label">${vip?'★ YADLE VIP':'YADLE AI'}</div><div class="bubble">${html}</div></div>`;
+  } else {
+    w.innerHTML = `<div class="c-avatar">👤</div><div class="bubble">${html}</div>`;
+  }
+  msgs.appendChild(w);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function sendChip(t) { document.getElementById('cTextarea').value=t; sendMessage(); }
+function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
